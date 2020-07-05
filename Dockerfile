@@ -66,8 +66,8 @@ RUN python3 -m ensurepip \
 # Clone repo and prepare working directory
 #
 RUN git clone -b master https://github.com/thejithinmathew/karate
-RUN mkdir /home/karate/bin/
-WORKDIR /home/karate/
+RUN mkdir karate/bin/
+WORKDIR karate/
 
 #
 # Install requirements
