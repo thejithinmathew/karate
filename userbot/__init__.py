@@ -116,6 +116,11 @@ DEFAULT_BIO = os.environ.get("DEFAULT_BIO", None)
 # Terminal Alias
 TERM_ALIAS = os.environ.get("TERM_ALIAS", None)
 
+
+TEMP_DOWNLOAD_DIRECTORY = os.environ.get("TMP_DOWNLOAD_DIRECTORY",
+                                         "./downloads")
+
+
 # Quote
 QUOTES_API_TOKEN = os.environ.get("QUOTES_API_TOKEN", None)
 
