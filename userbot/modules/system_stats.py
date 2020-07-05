@@ -71,12 +71,7 @@ async def bot_ver(event):
             revout = str(stdout.decode().strip()) \
                 + str(stderr.decode().strip())
 
-            await event.edit("`Userbot Version: "
-                             f"{verout}"
-                             "` \n"
-                             "`Revision: "
-                             f"{revout}"
-                             "`")
+            await event.edit("`Userbot Version: KarateBot 1.0")
         else:
             await event.edit(
                 "Shame that you don't have git, you're running - 'v1.beta.4' anyway!"
@@ -132,9 +127,8 @@ async def pipcheck(pip):
 async def amireallyalive(alive):
     """ For .on command, check if the bot is running.  """
     await alive.edit("`"
-                     "I'm alive, at your services....\n"
                      f"------------------------------------\n"
-                     f"•  User             : {DEFAULTUSER}\n"
+                     f"•  User             : JM\n"
                      f"•  Python           : {python_version()}\n"
                      f"•  Telethon version : {version.__version__}\n"
                      f"------------------------------------\n"
