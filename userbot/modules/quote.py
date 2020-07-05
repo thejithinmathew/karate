@@ -121,58 +121,61 @@ async def quotecmd(message):  # noqa: C901
         "Template": args[0],
         "APIKey": QUOTES_API_TOKEN
     })
-
-    resp = requests.post(config["api_url"] + "/api/v2/quote", data=request)
-    resp.raise_for_status()
-    resp = resp.json()
-
-    if resp["status"] == 500:
-        return await message.respond(strings["server_error"])
-    elif resp["status"] == 401:
-        if resp["message"] == "ERROR_TOKEN_INVALID":
-            return await message.respond(strings["invalid_token"])
-        else:
-            raise ValueError("Invalid response from server", resp)
-    elif resp["status"] == 403:
-        if resp["message"] == "ERROR_UNAUTHORIZED":
-            return await message.respond(strings["unauthorized"])
-        else:
-            raise ValueError("Invalid response from server", resp)
-    elif resp["status"] == 404:
-        if resp["message"] == "ERROR_TEMPLATE_NOT_FOUND":
-            newreq = requests.post(config["api_url"] + "/api/v1/getalltemplates", data={
-                "token": QUOTES_API_TOKEN
-            })
-            newreq = newreq.json()
-
-            if newreq["status"] == "NOT_ENOUGH_PERMISSIONS":
-                return await message.respond(strings["not_enough_permissions"])
-            elif newreq["status"] == "SUCCESS":
-                templates = strings["delimiter"].join(newreq["message"])
-                return await message.respond(strings["templates"].format(templates))
-            elif newreq["status"] == "INVALID_TOKEN":
+    try:
+        resp = requests.post(config["api_url"] + "/api/v2/quote", data=request)
+        resp.raise_for_status()
+        resp = resp.json()
+        if resp["status"] == 500:
+            return await message.respond(strings["server_error"])
+        elif resp["status"] == 401:
+            if resp["message"] == "ERROR_TOKEN_INVALID":
                 return await message.respond(strings["invalid_token"])
             else:
-                raise ValueError("Invalid response from server", newreq)
-        else:
-            raise ValueError("Invalid response from server", resp)
-    elif resp["status"] != 200:
-        raise ValueError("Invalid response from server", resp)
-    req = requests.get(config["api_url"] + "/cdn/" + resp["message"])
-    req.raise_for_status()
-    file = BytesIO(req.content)
-    file.seek(0)
-    img = Image.open(file)
-    with BytesIO() as sticker:
-        img.save(sticker, "webp")
-        sticker.name = "sticker.webp"
-        sticker.seek(0)
-        try:
-            await reply.reply(file=sticker)
-        except telethon.errors.rpcerrorlist.ChatSendStickersForbiddenError:
-            await message.respond(strings["cannot_send_stickers"])
-        file.close()
+                raise ValueError("Invalid response from server", resp)
+        elif resp["status"] == 403:
+            if resp["message"] == "ERROR_UNAUTHORIZED":
+                return await message.respond(strings["unauthorized"])
+            else:
+                raise ValueError("Invalid response from server", resp)
+        elif resp["status"] == 404:
+            if resp["message"] == "ERROR_TEMPLATE_NOT_FOUND":
+                newreq = requests.post(config["api_url"] + "/api/v1/getalltemplates", data={
+                    "token": QUOTES_API_TOKEN
+                })
+                newreq = newreq.json()
 
+                if newreq["status"] == "NOT_ENOUGH_PERMISSIONS":
+                    return await message.respond(strings["not_enough_permissions"])
+                elif newreq["status"] == "SUCCESS":
+                    templates = strings["delimiter"].join(newreq["message"])
+                    return await message.respond(strings["templates"].format(templates))
+                elif newreq["status"] == "INVALID_TOKEN":
+                    return await message.respond(strings["invalid_token"])
+                else:
+                    raise ValueError("Invalid response from server", newreq)
+            else:
+                raise ValueError("Invalid response from server", resp)
+        elif resp["status"] != 200:
+            raise ValueError("Invalid response from server", resp)
+        req = requests.get(config["api_url"] + "/cdn/" + resp["message"])
+        req.raise_for_status()
+        file = BytesIO(req.content)
+        file.seek(0)
+        img = Image.open(file)
+        with BytesIO() as sticker:
+            img.save(sticker, "webp")
+            sticker.name = "sticker.webp"
+            sticker.seek(0)
+            try:
+                await reply.reply(file=sticker)
+            except telethon.errors.rpcerrorlist.ChatSendStickersForbiddenError:
+                await message.respond(strings["cannot_send_stickers"])
+            file.close()
+    except:
+        logger.warning("Quotes Over")
+        return await message.edit(
+            "`Error: Quotes API Quota is Over!!`"
+        )
 
 async def get_markdown(reply):
     if not reply.entities:
