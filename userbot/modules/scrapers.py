@@ -27,7 +27,7 @@ from gtts import gTTS
 from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
 from asyncio import sleep
-from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY,
+from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID,
                      TEMP_DOWNLOAD_DIRECTORY)
 from userbot.events import register
 from telethon.tl.types import DocumentAttributeAudio
