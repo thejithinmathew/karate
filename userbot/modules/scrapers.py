@@ -26,11 +26,6 @@ from googletrans import LANGUAGES, Translator
 from gtts import gTTS
 from gtts.lang import tts_langs
 from emoji import get_emoji_regexp
-from youtube_dl import YoutubeDL
-from youtube_dl.utils import (DownloadError, ContentTooShortError,
-                              ExtractorError, GeoRestrictedError,
-                              MaxDownloadsReached, PostProcessingError,
-                              UnavailableVideoError, XAttrMetadataError)
 from asyncio import sleep
 from userbot import (CMD_HELP, BOTLOG, BOTLOG_CHATID, YOUTUBE_API_KEY,
                      TEMP_DOWNLOAD_DIRECTORY)
