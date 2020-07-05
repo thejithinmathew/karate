@@ -351,6 +351,7 @@ async def get_bots(show):
 
 
 CMD_HELP.update({
+    "admin":
     "\n\n>`.zombies`"
     "\nUsage: Searches for deleted accounts in a group. "
     "Use .zombies clean to remove deleted accounts from the group."
